@@ -1,0 +1,30 @@
+{
+  "generated_at": 1761000466,
+  "top_catches": [
+    {
+      "username": "nuflux",
+      "total_catches": 3,
+      "level": 1
+    }
+  ],
+  "top_levels": [
+    {
+      "username": "nuflux",
+      "level": 1,
+      "xp": 0.05,
+      "total_catches": 3
+    }
+  ],
+  "biggest_by_species": [
+    {
+      "species": "ant",
+      "size_mm": 3.0,
+      "username": "nuflux"
+    },
+    {
+      "species": "roach",
+      "size_mm": 66.8,
+      "username": "nuflux"
+    }
+  ]
+}
