@@ -1,9 +1,9 @@
 {
-  "generated_at": 1761002366,
+  "generated_at": 1761002737,
   "top_catches": [
     {
       "username": "nuflux",
-      "total_catches": 6,
+      "total_catches": 1,
       "level": 1
     }
   ],
@@ -11,29 +11,14 @@
     {
       "username": "nuflux",
       "level": 1,
-      "xp": 0.2166666,
-      "total_catches": 6
+      "xp": 0.0,
+      "total_catches": 1
     }
   ],
   "biggest_by_species": [
     {
       "species": "ant",
-      "size_mm": 3.0,
-      "username": "nuflux"
-    },
-    {
-      "species": "dragonfly",
-      "size_mm": 94.3,
-      "username": "nuflux"
-    },
-    {
-      "species": "mantis",
-      "size_mm": 43.8,
-      "username": "nuflux"
-    },
-    {
-      "species": "roach",
-      "size_mm": 66.8,
+      "size_mm": 11.7,
       "username": "nuflux"
     }
   ]
