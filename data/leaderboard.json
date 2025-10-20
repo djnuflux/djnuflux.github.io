@@ -1,9 +1,9 @@
 {
-  "generated_at": 1761001571,
+  "generated_at": 1761002171,
   "top_catches": [
     {
       "username": "nuflux",
-      "total_catches": 5,
+      "total_catches": 6,
       "level": 1
     }
   ],
@@ -12,7 +12,7 @@
       "username": "nuflux",
       "level": 1,
       "xp": 0.2166666,
-      "total_catches": 5
+      "total_catches": 6
     }
   ],
   "biggest_by_species": [
@@ -24,6 +24,11 @@
     {
       "species": "dragonfly",
       "size_mm": 94.3,
+      "username": "nuflux"
+    },
+    {
+      "species": "mantis",
+      "size_mm": 43.8,
       "username": "nuflux"
     },
     {
