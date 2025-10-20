@@ -1,10 +1,12 @@
 {
-  "generated_at": 1761002737,
+  "generated_at": 1761004286,
   "top_catches": [
     {
       "username": "nuflux",
       "total_catches": 1,
-      "level": 1
+      "level": 1,
+      "name_color": null,
+      "paint_css": null
     }
   ],
   "top_levels": [
@@ -12,14 +14,18 @@
       "username": "nuflux",
       "level": 1,
       "xp": 0.0,
-      "total_catches": 1
+      "total_catches": 1,
+      "name_color": null,
+      "paint_css": null
     }
   ],
   "biggest_by_species": [
     {
       "species": "ant",
       "size_mm": 11.7,
-      "username": "nuflux"
+      "username": "nuflux",
+      "name_color": null,
+      "paint_css": null
     }
   ]
 }
