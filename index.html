@@ -2,66 +2,177 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>BugBot Leaderboards</title>
   <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>BugBot Leaderboards</title>
   <style>
-    :root { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
-    body { margin: 24px; }
-    h1 { margin: 0 0 16px; }
-    .wrap { display: grid; gap: 28px; }
-    .card { border: 1px solid #ddd; border-radius: 12px; padding: 16px; box-shadow: 0 1px 4px rgba(0,0,0,.05); }
-    table { width: 100%; border-collapse: collapse; }
-    th, td { padding: 10px 8px; border-bottom: 1px solid #eee; text-align: left; }
-    th { cursor: pointer; position: sticky; top: 0; background: #fafafa; }
-    .muted { color: #666; font-size: 12px; }
-    .pill { display:inline-block; padding:2px 8px; border-radius: 999px; background:#f3f4f6; font-size:12px; }
+    /* ---- Reset / Base ---- */
+    *,*::before,*::after{box-sizing:border-box}
+    :root{
+      --bg1:#0b1020;          /* deep space */
+      --bg2:#141b34;          /* dusk */
+      --card:#111827cc;       /* glass card */
+      --card-border:#2a3557;  /* subtle border */
+      --acc:#7dd3fc;          /* cyan */
+      --acc2:#a78bfa;         /* purple */
+      --text:#e5e7eb;         /* light */
+      --muted:#9ca3af;        /* muted */
+      --chip:#1f2937;         /* chip bg */
+      --shine:linear-gradient(135deg,var(--acc),var(--acc2));
+      --radius:16px;
+      --shadow:0 10px 30px rgba(0,0,0,.35);
+    }
+    html,body{height:100%}
+    body{
+      margin:0; color:var(--text); font:15px/1.6 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial;
+      background: radial-gradient(1200px 800px at 10% -10%, #1d2547 0%, transparent 60%),
+                  radial-gradient(800px 800px at 100% 0%, #2a1f58 0%, transparent 50%),
+                  linear-gradient(180deg,var(--bg1),var(--bg2));
+      background-attachment: fixed;
+    }
+
+    /* ---- Layout ---- */
+    .max{max-width:1100px;margin:32px auto;padding:0 20px}
+    header{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px}
+    .brand{display:flex;align-items:center;gap:12px}
+    .logo{
+      width:38px;height:38px;border-radius:12px;
+      background:var(--shine); box-shadow:0 0 0 4px #ffffff10, var(--shadow);
+      display:grid;place-items:center;color:#0b1020;font-weight:800;
+    }
+    .title{font-size:22px;font-weight:700;letter-spacing:.3px}
+
+    .toolbar{display:flex;gap:10px;flex-wrap:wrap}
+    .chip{background:var(--chip);border:1px solid #334155;border-radius:999px;padding:8px 12px;display:flex;gap:8px;align-items:center}
+    .chip input, .chip select{
+      background:transparent;border:none;outline:none;color:var(--text);font:inherit;min-width:140px
+    }
+
+    .grid{display:grid;gap:18px}
+    @media(min-width:900px){.grid{grid-template-columns:1fr 1fr}}
+
+    .card{
+      background:var(--card);backdrop-filter: blur(8px);
+      border:1px solid var(--card-border);border-radius:var(--radius);
+      box-shadow:var(--shadow);overflow:hidden
+    }
+    .card h2{margin:0;padding:14px 16px;border-bottom:1px solid #263253;background:#0f172acc}
+
+    /* ---- Table ---- */
+    .tbl{width:100%;border-collapse:collapse}
+    .tbl th,.tbl td{padding:12px 14px;border-bottom:1px solid #1f2937}
+    .tbl th{font-weight:600;white-space:nowrap;position:sticky;top:0;background:#0f172aee;backdrop-filter: blur(6px);}
+    .tbl th button{
+      all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:8px
+    }
+    .tbl th button .sort{opacity:.6;font-size:12px}
+    .tbl tr:hover td{background:#0b1224}
+    .muted{color:var(--muted)}
+
+    /* ---- Species list card ---- */
+    .species-wrap{display:flex;gap:10px;flex-wrap:wrap;padding:14px}
+    .species{
+      border:1px solid #334155;background:#0b1224;border-radius:12px;padding:8px 10px;display:flex;gap:8px;align-items:center
+    }
+    .dot{width:8px;height:8px;border-radius:999px;background:var(--acc);box-shadow:0 0 10px var(--acc)}
+
+    /* ---- Footer ---- */
+    footer{opacity:.6;padding:18px 0;text-align:center}
+
+    /* ---- Subtle focus ring ---- */
+    :focus-visible{outline:2px solid #7dd3fc66;outline-offset:2px;border-radius:8px}
+      /* ---- Name styles (Twitch color / 7TV paint) ---- */
+    .name{display:inline-flex;align-items:center;gap:8px}
+    .name .swatch{width:10px;height:10px;border-radius:50%;background:#ffffff33;border:1px solid #ffffff22;box-shadow:0 0 0 2px #00000030}
+    .name .paint{display:inline-block;-webkit-background-clip:text;background-clip:text;color:transparent}
   </style>
 </head>
 <body>
-  <h1>BugBot Leaderboards</h1>
-  <p class="muted">Auto-generated from your BugBot SQLite database.</p>
-  <div class="wrap">
-    <div class="card">
-      <h2>Top Catches</h2>
-      <table id="top-catches">
-        <thead><tr>
-          <th data-k="username">User</th>
-          <th data-k="total_catches" data-n>Catch Count</th>
-          <th data-k="level" data-n>Level</th>
-        </tr></thead>
-        <tbody></tbody>
-      </table>
+  <div class="max">
+    <header>
+      <div class="brand">
+        <div class="logo">B</div>
+        <div class="title">BugBot Leaderboards</div>
+      </div>
+      <div class="toolbar">
+        <label class="chip">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M21 21l-4.35-4.35M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15Z" stroke="currentColor" stroke-width="1.6"/></svg>
+          <input id="search" placeholder="Search user…" />
+        </label>
+        <label class="chip">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="1.6"/></svg>
+          <select id="speciesFilter"><option value="">All species</option></select>
+        </label>
+      </div>
+    </header>
+
+    <div class="grid">
+      <section class="card">
+        <h2>Top Catches</h2>
+        <table class="tbl" id="top-catches">
+          <thead><tr>
+            <th><button data-k="username">User <span class="sort">⇅</span></button></th>
+            <th><button data-k="total_catches" data-n>Catch Count <span class="sort">⇅</span></button></th>
+            <th><button data-k="level" data-n>Level <span class="sort">⇅</span></button></th>
+          </tr></thead>
+          <tbody></tbody>
+        </table>
+      </section>
+
+      <section class="card">
+        <h2>Top Levels</h2>
+        <table class="tbl" id="top-levels">
+          <thead><tr>
+            <th><button data-k="username">User <span class="sort">⇅</span></button></th>
+            <th><button data-k="level" data-n>Level <span class="sort">⇅</span></button></th>
+            <th><button data-k="xp" data-n>XP (0–1) <span class="sort">⇅</span></button></th>
+            <th><button data-k="total_catches" data-n>Catches <span class="sort">⇅</span></button></th>
+          </tr></thead>
+          <tbody></tbody>
+        </table>
+      </section>
+
+      <section class="card" style="grid-column:1/-1">
+        <h2>Biggest by Species</h2>
+        <table class="tbl" id="biggest">
+          <thead><tr>
+            <th><button data-k="species">Species <span class="sort">⇅</span></button></th>
+            <th><button data-k="size_mm" data-n>Size (mm) <span class="sort">⇅</span></button></th>
+            <th><button data-k="username">User <span class="sort">⇅</span></button></th>
+          </tr></thead>
+          <tbody></tbody>
+        </table>
+        <div class="species-wrap" id="speciesChips"></div>
+      </section>
     </div>
 
-    <div class="card">
-      <h2>Top Levels</h2>
-      <table id="top-levels">
-        <thead><tr>
-          <th data-k="username">User</th>
-          <th data-k="level" data-n>Level</th>
-          <th data-k="xp" data-n>XP (0–1)</th>
-          <th data-k="total_catches" data-n>Catches</th>
-        </tr></thead>
-        <tbody></tbody>
-      </table>
-    </div>
-
-    <div class="card">
-      <h2>Biggest by Species</h2>
-      <table id="biggest">
-        <thead><tr>
-          <th data-k="species">Species</th>
-          <th data-k="size_mm" data-n>Size (mm)</th>
-          <th data-k="username">User</th>
-        </tr></thead>
-        <tbody></tbody>
-      </table>
-      <p class="muted">Shows the largest recorded size per species.</p>
-    </div>
+    <footer>
+      <span id="stamp" class="muted"></span>
+    </footer>
   </div>
 
   <script>
-    const DATA_URL = 'data/leaderboard.json'; // committed by your export script
+    const DATA_URL = 'data/leaderboard.json';
+    const $ = s => document.querySelector(s);
+
+    function safeHex(hex){
+      if(!hex || typeof hex !== 'string') return null;
+      const m = hex.trim().match(/^#([0-9a-f]{3}|[0-9a-f]{6})$/i);
+      return m ? m[0] : null;
+    }
+
+    function renderName(row){
+      const name = row.username ?? '';
+      const color = safeHex(row.name_color);
+      const paint = row.paint_css; // assumed to be a valid CSS gradient string like 'linear-gradient(...)'
+      // prefer 7TV paint if provided, else Twitch color
+      if (paint && typeof paint === 'string' && paint.includes('gradient')){
+        return `<span class="name"><span class="swatch" style="background:${paint}"></span><span class="paint" style="background:${paint}">${name}</span></span>`;
+      }
+      if (color){
+        return `<span class="name"><span class="swatch" style="background:${color}"></span><span style="color:${color}">${name}</span></span>`;
+      }
+      return `<span class="name"><span class="swatch"></span><span>${name}</span></span>`;
+    }
 
     function renderTable(id, rows, columns) {
       const tbody = document.querySelector(`#${id} tbody`);
@@ -70,7 +181,32 @@
         const tr = document.createElement('tr');
         columns.forEach(k => {
           const td = document.createElement('td');
-          td.textContent = (r[k] ?? '');
+          if (k === 'username') {
+            td.innerHTML = renderName(r);
+          } else {
+            let v = r[k];
+            if (typeof v === 'number') {
+              if (k === 'xp') v = v.toFixed(3);
+              if (k === 'size_mm') v = Number(v).toFixed(1);
+            }
+            td.textContent = (v ?? '');
+          }
+          tr.appendChild(td);
+        });
+        tbody.appendChild(tr);
+      });
+    } tbody`);
+      tbody.innerHTML = '';
+      rows.forEach(r => {
+        const tr = document.createElement('tr');
+        columns.forEach(k => {
+          const td = document.createElement('td');
+          let v = r[k];
+          if (typeof v === 'number') {
+            if (k === 'xp') v = v.toFixed(3);
+            if (k === 'size_mm') v = Number(v).toFixed(1);
+          }
+          td.textContent = (v ?? '');
           tr.appendChild(td);
         });
         tbody.appendChild(tr);
@@ -78,40 +214,95 @@
     }
 
     function attachSort(tableId, rows, columns) {
-      const table = document.getElementById(tableId);
-      const ths = table.querySelectorAll('th');
-      ths.forEach((th, i) => {
-        th.addEventListener('click', () => {
-          const key = th.dataset.k;
-          const numeric = th.hasAttribute('data-n');
-          const dir = th.dataset.dir === 'asc' ? 'desc' : 'asc';
-          ths.forEach(t => t.removeAttribute('data-dir'));
-          th.setAttribute('data-dir', dir);
+      const ths = document.querySelectorAll(`#${tableId} thead th button`);
+      ths.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const key = btn.dataset.k;
+          const numeric = btn.hasAttribute('data-n');
+          const dir = btn.dataset.dir === 'asc' ? 'desc' : 'asc';
+          ths.forEach(b => b.removeAttribute('data-dir'));
+          btn.setAttribute('data-dir', dir);
           rows.sort((a,b) => {
-            const A = a[key] ?? (numeric ? 0 : '');
-            const B = b[key] ?? (numeric ? 0 : '');
-            return (A === B ? 0 : (A > B ? 1 : -1)) * (dir === 'asc' ? 1 : -1);
+            const A = a[key];
+            const B = b[key];
+            const av = numeric ? Number(A ?? 0) : String(A ?? '').toLowerCase();
+            const bv = numeric ? Number(B ?? 0) : String(B ?? '').toLowerCase();
+            return (av === bv ? 0 : (av > bv ? 1 : -1)) * (dir === 'asc' ? 1 : -1);
           });
           renderTable(tableId, rows, columns);
         });
       });
     }
 
-    async function main() {
-      const res = await fetch(DATA_URL, {cache: 'no-store'});
+    function uniq(arr){return [...new Set(arr)]}
+
+    function applySearchFilter(rows, q){
+      if(!q) return rows;
+      q = q.toLowerCase();
+      return rows.filter(r => (r.username||'').toLowerCase().includes(q));
+    }
+
+    function applySpeciesFilter(rows, species){
+      if(!species) return rows;
+      return rows.filter(r => (r.species||'') === species);
+    }
+
+    function renderSpeciesChips(speciesList){
+      const wrap = $('#speciesChips');
+      wrap.innerHTML = '';
+      speciesList.forEach(s => {
+        const el = document.createElement('div');
+        el.className = 'species';
+        el.innerHTML = `<span class="dot"></span><span>${s}</span>`;
+        el.addEventListener('click', () => {
+          $('#speciesFilter').value = s; update();
+        });
+        wrap.appendChild(el);
+      });
+    }
+
+    async function main(){
+      const res = await fetch(DATA_URL, {cache:'no-store'});
       const data = await res.json();
 
-      const topCatches = data.top_catches || [];
-      renderTable('top-catches', topCatches, ['username','total_catches','level']);
-      attachSort('top-catches', topCatches, ['username','total_catches','level']);
+      const topCatchesRaw = data.top_catches || [];
+      const topLevelsRaw  = data.top_levels || [];
+      const biggestRaw    = data.biggest_by_species || [];
 
-      const topLevels = data.top_levels || [];
-      renderTable('top-levels', topLevels, ['username','level','xp','total_catches']);
-      attachSort('top-levels', topLevels, ['username','level','xp','total_catches']);
+      const speciesList = uniq(biggestRaw.map(x=>x.species)).sort();
+      const sf = $('#speciesFilter');
+      speciesList.forEach(s=>{
+        const o=document.createElement('option');o.value=s;o.textContent=s;sf.appendChild(o);
+      });
+      renderSpeciesChips(speciesList);
 
-      const biggest = data.biggest_by_species || [];
-      renderTable('biggest', biggest, ['species','size_mm','username']);
-      attachSort('biggest', biggest, ['species','size_mm','username']);
+      const state = { q:'', species:'' };
+
+      function update(){
+        state.q = $('#search').value.trim();
+        state.species = $('#speciesFilter').value;
+        const tc = applySearchFilter(topCatchesRaw, state.q);
+        const tl = applySearchFilter(topLevelsRaw, state.q);
+        const bg = applySpeciesFilter(biggestRaw, state.species);
+        renderTable('top-catches', tc, ['username','total_catches','level']);
+        renderTable('top-levels',  tl, ['username','level','xp','total_catches']);
+        renderTable('biggest',     bg, ['species','size_mm','username']);
+      }
+
+      attachSort('top-catches', topCatchesRaw, ['username','total_catches','level']);
+      attachSort('top-levels',  topLevelsRaw,  ['username','level','xp','total_catches']);
+      attachSort('biggest',     biggestRaw,    ['species','size_mm','username']);
+
+      $('#search').addEventListener('input', update);
+      $('#speciesFilter').addEventListener('change', update);
+
+      update();
+
+      // stamp
+      if (data.generated_at){
+        const dt = new Date(data.generated_at*1000);
+        $('#stamp').textContent = dt.toLocaleString();
+      }
     }
 
     main();
