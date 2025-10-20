@@ -61,29 +61,26 @@
     .tbl{width:100%;border-collapse:collapse}
     .tbl th,.tbl td{padding:12px 14px;border-bottom:1px solid #1f2937}
     .tbl th{font-weight:600;white-space:nowrap;position:sticky;top:0;background:#0f172aee;backdrop-filter: blur(6px);}
-    .tbl th button{
-      all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:8px
-    }
+    .tbl th button{all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:8px}
     .tbl th button .sort{opacity:.6;font-size:12px}
     .tbl tr:hover td{background:#0b1224}
     .muted{color:var(--muted)}
 
     /* ---- Species list card ---- */
     .species-wrap{display:flex;gap:10px;flex-wrap:wrap;padding:14px}
-    .species{
-      border:1px solid #334155;background:#0b1224;border-radius:12px;padding:8px 10px;display:flex;gap:8px;align-items:center
-    }
+    .species{border:1px solid #334155;background:#0b1224;border-radius:12px;padding:8px 10px;display:flex;gap:8px;align-items:center}
     .dot{width:8px;height:8px;border-radius:999px;background:var(--acc);box-shadow:0 0 10px var(--acc)}
+
+    /* ---- Name styles (Twitch color / 7TV paint) ---- */
+    .name{display:inline-flex;align-items:center;gap:8px}
+    .name .swatch{width:10px;height:10px;border-radius:50%;background:#ffffff33;border:1px solid #ffffff22;box-shadow:0 0 0 2px #00000030}
+    .name .paint{display:inline-block;-webkit-background-clip:text;background-clip:text;color:transparent}
 
     /* ---- Footer ---- */
     footer{opacity:.6;padding:18px 0;text-align:center}
 
     /* ---- Subtle focus ring ---- */
     :focus-visible{outline:2px solid #7dd3fc66;outline-offset:2px;border-radius:8px}
-      /* ---- Name styles (Twitch color / 7TV paint) ---- */
-    .name{display:inline-flex;align-items:center;gap:8px}
-    .name .swatch{width:10px;height:10px;border-radius:50%;background:#ffffff33;border:1px solid #ffffff22;box-shadow:0 0 0 2px #00000030}
-    .name .paint{display:inline-block;-webkit-background-clip:text;background-clip:text;color:transparent}
   </style>
 </head>
 <body>
@@ -170,8 +167,7 @@
     function renderName(row){
       const name = row.username ?? '';
       const color = safeHex(row.name_color);
-      const paint = row.paint_css; // assumed to be a valid CSS gradient string like 'linear-gradient(...)'
-      // prefer 7TV paint if provided, else Twitch color
+      const paint = row.paint_css; // expected to be 'linear-gradient(...)'
       if (paint && typeof paint === 'string' && paint.includes('gradient')){
         return `<span class="name"><span class="swatch" style="background:${paint}"></span><span class="paint" style="background:${paint}">${name}</span></span>`;
       }
@@ -198,22 +194,6 @@
             }
             td.textContent = (v ?? '');
           }
-          tr.appendChild(td);
-        });
-        tbody.appendChild(tr);
-      });
-    } tbody`);
-      tbody.innerHTML = '';
-      rows.forEach(r => {
-        const tr = document.createElement('tr');
-        columns.forEach(k => {
-          const td = document.createElement('td');
-          let v = r[k];
-          if (typeof v === 'number') {
-            if (k === 'xp') v = v.toFixed(3);
-            if (k === 'size_mm') v = Number(v).toFixed(1);
-          }
-          td.textContent = (v ?? '');
           tr.appendChild(td);
         });
         tbody.appendChild(tr);
@@ -270,6 +250,7 @@
 
     async function main(){
       try{
+        console.log('[leaderboard] fetching', DATA_URL);
         const res = await fetch(DATA_URL, {cache:'no-store'});
         if(!res.ok){
           showError(`Failed to fetch data (${res.status}). Check that ${DATA_URL} exists on your Pages branch.`);
@@ -313,47 +294,6 @@
       }catch(err){
         showError('Could not load leaderboard data. If running locally, use a web server (file:// fetches will fail).');
         console.error(err);
-      }
-    });
-      const data = await res.json();
-
-      const topCatchesRaw = data.top_catches || [];
-      const topLevelsRaw  = data.top_levels || [];
-      const biggestRaw    = data.biggest_by_species || [];
-
-      const speciesList = uniq(biggestRaw.map(x=>x.species)).sort();
-      const sf = $('#speciesFilter');
-      speciesList.forEach(s=>{
-        const o=document.createElement('option');o.value=s;o.textContent=s;sf.appendChild(o);
-      });
-      renderSpeciesChips(speciesList);
-
-      const state = { q:'', species:'' };
-
-      function update(){
-        state.q = $('#search').value.trim();
-        state.species = $('#speciesFilter').value;
-        const tc = applySearchFilter(topCatchesRaw, state.q);
-        const tl = applySearchFilter(topLevelsRaw, state.q);
-        const bg = applySpeciesFilter(biggestRaw, state.species);
-        renderTable('top-catches', tc, ['username','total_catches','level']);
-        renderTable('top-levels',  tl, ['username','level','xp','total_catches']);
-        renderTable('biggest',     bg, ['species','size_mm','username']);
-      }
-
-      attachSort('top-catches', topCatchesRaw, ['username','total_catches','level']);
-      attachSort('top-levels',  topLevelsRaw,  ['username','level','xp','total_catches']);
-      attachSort('biggest',     biggestRaw,    ['species','size_mm','username']);
-
-      $('#search').addEventListener('input', update);
-      $('#speciesFilter').addEventListener('change', update);
-
-      update();
-
-      // stamp
-      if (data.generated_at){
-        const dt = new Date(data.generated_at*1000);
-        $('#stamp').textContent = dt.toLocaleString();
       }
     }
 
