@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Twitch Bot Admin</title>
+<style>
+:root { --bg:#0b1020; --card:#11162a; --ink:#e8f0ff; --muted:#9fb0d9; --accent:#6ab0ff; }
+body{margin:0;background:linear-gradient(120deg,#0b1020,#121a33);color:var(--ink);font:16px system-ui,Segoe UI,Roboto,Ubuntu,sans-serif}
+header{display:flex;gap:12px;align-items:center;justify-content:space-between;padding:18px 22px;background:#0b1327;position:sticky;top:0;z-index:5;border-bottom:1px solid #182243}
+.brand{font-weight:700;letter-spacing:.5px}
+.wrap{max-width:980px;margin:28px auto;padding:0 18px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.card{background:var(--card);border:1px solid #1d2853;border-radius:16px;padding:16px;box-shadow:0 6px 24px rgba(0,0,0,.25)}
+.card h2{margin:.2rem 0 1rem;font-size:1.05rem;color:#cfe0ff}
+label{display:block;color:var(--muted);font-size:.85rem;margin:.35rem 0}
+input,select,textarea,button{width:100%;box-sizing:border-box}
+input,textarea,select{background:#0c1230;border:1px solid #203065;color:var(--ink);border-radius:10px;padding:10px 12px;outline:none}
+textarea{min-height:88px;resize:vertical}
+button{cursor:pointer;background:linear-gradient(180deg,#2c6bff,#2154ca);border:none;border-radius:12px;color:white;font-weight:600;padding:10px 12px;transition:filter .15s}
+button:hover{filter:brightness(1.08)}
+.row{display:flex;gap:10px}
+.row>*{flex:1}
+.muted{color:var(--muted);font-size:.9rem}
+.ok{color:#7aff9a}
+.bad{color:#ff8a8a}
+.log{background:#050919;border:1px solid #1a2450;border-radius:12px;padding:10px;min-height:140px;white-space:pre-wrap}
+code.key{user-select:all;padding:.15rem .35rem;background:#091034;border:1px solid #1b2b63;border-radius:8px}
+</style>
+</head>
+<body>
+<header>
+<div class="brand">Twitch Bot Admin</div>
+<div class="row" style="max-width:560px;width:100%">
+<input id="backend" placeholder="https://YOUR_BACKEND_URL" />
+<input id="token" placeholder="Paste admin token" />
+<button id="save">Save</button>
+</div>
+</header>
+
+
+<div class="wrap">
+<p class="muted">Backend URL and token are stored in <em>localStorage</em>. Your token never leaves your browser except in HTTPS API calls to your backend.</p>
+
+
+<div class="grid">
+<section class="card">
+<h2>Health / Status</h2>
+<div class="row">
+<button id="health">Check Health</button>
+<button id="whoami">Who Am I</button>
+</div>
+<p class="muted" id="healthOut">—</p>
+</section>
+
+
+<section class="card">
+<h2>Send Chat Message</h2>
+<label>Channel</label>
+<input id="channel" placeholder="#yourchannel" />
+<label>Message</label>
+<textarea id="message" placeholder="Hello chat!" ></textarea>
+<button id="send">Send</button>
+<p class="muted" id="sendOut">—</p>
+</section>
+
+
+<section class="card">
+<h2>Features</h2>
+<label>Blackjack mini-game</label>
+<div class="row">
+<button data-feature="blackjack" data-state="enable">Enable</button>
+<button data-feature="blackjack" data-state="disable">Disable</button>
+</div>
+<label>Slowmode (bot-side)</label>
+<div class="row">
+<button data-feature="slowmode" data-state="enable">Enable</button>
+<button data-feature="slowmode" data-state="disable">Disable</button>
+</div>
+<p class="muted" id="featOut">—</p>
+</section>
+
+
+<section class="card">
+</html>
