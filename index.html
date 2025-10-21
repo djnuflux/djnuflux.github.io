@@ -156,10 +156,30 @@
 
   <script>
     // Resolve the data file relative to this page, regardless of subpath
-    const DATA_URL = new URL('data/leaderboard.json', document.baseURI).toString();
-    const $ = s => document.querySelector(s);
+    // Robust data locator: try common locations in order
+const CANDIDATES = [
+  new URL('data/leaderboard.json', document.baseURI).toString(),
+  new URL('/data/leaderboard.json', document.baseURI).toString(),
+  new URL('/docs/data/leaderboard.json', document.baseURI).toString()
+];
 
-    function showError(msg){
+async function loadData(){
+  for (const url of CANDIDATES){
+    try {
+      console.log('[leaderboard] trying', url);
+      const res = await fetch(url, {cache:'no-store'});
+      if (!res.ok) { continue; }
+      const ct = res.headers.get('content-type') || '';
+      if (!ct.includes('application/json')) { continue; }
+      return await res.json();
+    } catch (_) {}
+  }
+  throw new Error('Could not find leaderboard.json (tried: '+CANDIDATES.join(', ')+')');
+}
+
+const $ = s => document.querySelector(s);
+
+function showError(msg){(msg){
       const el = document.getElementById('stamp');
       if(el) el.textContent = msg;
       console.error('[leaderboard]', msg);
@@ -286,12 +306,7 @@
     async function main(){
       try{
         console.log('[leaderboard] fetching', DATA_URL);
-        const res = await fetch(DATA_URL, {cache:'no-store'});
-        if(!res.ok){
-          showError(`Failed to fetch data (${res.status}). Check that ${DATA_URL} exists on your Pages branch.`);
-          return;
-        }
-        const data = await res.json();
+        const data = await loadData();
 
         const topCatchesRaw = data.top_catches || [];
         const topLevelsRaw  = data.top_levels || [];
