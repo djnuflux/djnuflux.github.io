@@ -1,9 +1,9 @@
 {
-  "generated_at": 1761079084,
+  "generated_at": 1761079684,
   "top_catches": [
     {
       "username": "nuflux",
-      "total_catches": 53,
+      "total_catches": 56,
       "level": 4
     },
     {
@@ -26,8 +26,8 @@
     {
       "username": "nuflux",
       "level": 4,
-      "xp": 0.11999820000000017,
-      "total_catches": 53
+      "xp": 0.7399980000000002,
+      "total_catches": 56
     },
     {
       "username": "holloww124",
@@ -76,7 +76,7 @@
     },
     {
       "species": "mantis",
-      "size_mm": 34.0,
+      "size_mm": 75.5,
       "username": "nuflux"
     },
     {
