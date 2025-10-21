@@ -35,10 +35,12 @@
     header{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px}
     .brand{display:flex;align-items:center;gap:12px}
     .logo{
-      width:38px;height:38px;border-radius:12px;
-      background:var(--shine); box-shadow:0 0 0 4px #ffffff10, var(--shadow);
-      display:grid;place-items:center;color:#0b1020;font-weight:800;
+      width:40px;height:40px;border-radius:12px;
+      background:#0b1020cc; border:1px solid var(--card-border);
+      box-shadow:0 0 0 4px #ffffff10, var(--shadow);
+      display:grid;place-items:center;overflow:hidden
     }
+    .logo img{width:100%;height:100%;object-fit:contain;image-rendering:auto}
     .title{font-size:22px;font-weight:700;letter-spacing:.3px}
 
     .toolbar{display:flex;gap:10px;flex-wrap:wrap}
@@ -82,12 +84,17 @@
     /* ---- Subtle focus ring ---- */
     :focus-visible{outline:2px solid #7dd3fc66;outline-offset:2px;border-radius:8px}
   </style>
+  <link rel="icon" href="icon.png" sizes="any" type="image/png">
+  <link rel="apple-touch-icon" href="icon.png">
+  <link rel="shortcut icon" href="icon.png" type="image/png">
+  <meta property="og:image" content="icon.png">
+  <meta name="theme-color" content="#0b1020">
 </head>
 <body>
   <div class="max">
     <header>
       <div class="brand">
-        <div class="logo">B</div>
+        <div class="logo"><img src="icon.png" alt="BugBot" width="40" height="40" decoding="async" loading="eager"></div>
         <div class="title">BugBot Leaderboards</div>
       </div>
       <div class="toolbar">
@@ -164,12 +171,40 @@
       return m ? m[0] : null;
     }
 
+    function escapeHtml(s){
+      return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;'}[c]));
+    }
+
+    function paintObjectToCSS(p){
+      // Supports simple 7TV-style objects: {type:'linear'|'radial'|'conic', angle:90, stops:[['#a',0],['#b',1]]}
+      try{
+        if (!p || typeof p !== 'object' || !Array.isArray(p.stops)) return null;
+        const type = (p.type||'linear').toLowerCase();
+        const angle = (p.angle!=null ? p.angle : 90);
+        const stops = p.stops.map(s=> (Array.isArray(s) ? `${s[0]} ${Math.round((s[1]||0)*100)}%` : String(s))).join(',');
+        if (type === 'radial') return `radial-gradient(circle, ${stops})`;
+        if (type === 'conic')  return `conic-gradient(from ${angle}deg, ${stops})`;
+        return `linear-gradient(${angle}deg, ${stops})`;
+      }catch{ return null; }
+    }
+
     function renderName(row){
-      const name = row.username ?? '';
+      const name = escapeHtml(row.username ?? '');
       const color = safeHex(row.name_color);
-      const paint = row.paint_css; // expected to be 'linear-gradient(...)'
-      if (paint && typeof paint === 'string' && paint.includes('gradient')){
-        return `<span class="name"><span class="swatch" style="background:${paint}"></span><span class="paint" style="background:${paint}">${name}</span></span>`;
+      let paint = row.paint_css; // can be a string 'linear-gradient(...)' or an object
+      let css = null;
+      if (paint) {
+        if (typeof paint === 'string') css = paint.trim();
+        else css = paintObjectToCSS(paint);
+      }
+      if (css){
+        return `<span class="name"><span class="swatch" style="background:${css}"></span><span class="paint" style="background:${css}">${name}</span></span>`;
+      }
+      if (color){
+        return `<span class="name"><span class="swatch" style="background:${color}"></span><span style="color:${color}">${name}</span></span>`;
+      }
+      return `<span class="name"><span class="swatch"></span><span>${name}</span></span>`;
+    }"></span><span class="paint" style="background:${paint}">${name}</span></span>`;
       }
       if (color){
         return `<span class="name"><span class="swatch" style="background:${color}"></span><span style="color:${color}">${name}</span></span>`;
