@@ -1,9 +1,9 @@
 {
-  "generated_at": 1761010917,
+  "generated_at": 1761011517,
   "top_catches": [
     {
       "username": "nuflux",
-      "total_catches": 3,
+      "total_catches": 5,
       "level": 1
     }
   ],
@@ -12,10 +12,15 @@
       "username": "nuflux",
       "level": 1,
       "xp": 0.0,
-      "total_catches": 3
+      "total_catches": 5
     }
   ],
   "biggest_by_species": [
+    {
+      "species": "beetle",
+      "size_mm": 20.2,
+      "username": "nuflux"
+    },
     {
       "species": "dragonfly",
       "size_mm": 61.9,
