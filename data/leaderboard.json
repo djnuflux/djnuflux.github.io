@@ -1,40 +1,40 @@
 {
-  "generated_at": 1761060975,
+  "generated_at": 1761061575,
   "top_catches": [
     {
       "username": "nuflux",
-      "total_catches": 32,
-      "level": 2
+      "total_catches": 35,
+      "level": 3
     },
     {
       "username": "mozacs",
-      "total_catches": 3,
+      "total_catches": 4,
       "level": 1
     },
     {
       "username": "holloww124",
-      "total_catches": 1,
+      "total_catches": 2,
       "level": 1
     }
   ],
   "top_levels": [
     {
       "username": "nuflux",
-      "level": 2,
-      "xp": 0.8599988000000001,
-      "total_catches": 32
+      "level": 3,
+      "xp": 0.19333200000000006,
+      "total_catches": 35
     },
     {
       "username": "holloww124",
       "level": 1,
       "xp": 0.08,
-      "total_catches": 1
+      "total_catches": 2
     },
     {
       "username": "mozacs",
       "level": 1,
       "xp": 0.0,
-      "total_catches": 3
+      "total_catches": 4
     }
   ],
   "biggest_by_species": [
@@ -60,8 +60,13 @@
     },
     {
       "species": "dragonfly",
-      "size_mm": 61.9,
-      "username": "nuflux"
+      "size_mm": 84.5,
+      "username": "mozacs"
+    },
+    {
+      "species": "mantis",
+      "size_mm": 26.5,
+      "username": "holloww124"
     },
     {
       "species": "moth",
