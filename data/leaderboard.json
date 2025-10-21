@@ -1,9 +1,9 @@
 {
-  "generated_at": 1761014987,
+  "generated_at": 1761015588,
   "top_catches": [
     {
       "username": "nuflux",
-      "total_catches": 13,
+      "total_catches": 16,
       "level": 1
     }
   ],
@@ -12,7 +12,7 @@
       "username": "nuflux",
       "level": 1,
       "xp": 0.0,
-      "total_catches": 13
+      "total_catches": 16
     }
   ],
   "biggest_by_species": [
@@ -24,6 +24,11 @@
     {
       "species": "beetle",
       "size_mm": 20.2,
+      "username": "nuflux"
+    },
+    {
+      "species": "buh",
+      "size_mm": 64.6,
       "username": "nuflux"
     },
     {
@@ -43,7 +48,7 @@
     },
     {
       "species": "roach",
-      "size_mm": 54.8,
+      "size_mm": 56.3,
       "username": "nuflux"
     }
   ]
