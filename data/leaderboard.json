@@ -1,9 +1,9 @@
 {
-  "generated_at": 1761011976,
+  "generated_at": 1761012218,
   "top_catches": [
     {
       "username": "nuflux",
-      "total_catches": 5,
+      "total_catches": 6,
       "level": 1
     }
   ],
@@ -12,10 +12,15 @@
       "username": "nuflux",
       "level": 1,
       "xp": 0.0,
-      "total_catches": 5
+      "total_catches": 6
     }
   ],
   "biggest_by_species": [
+    {
+      "species": "ant",
+      "size_mm": 7.1,
+      "username": "nuflux"
+    },
     {
       "species": "beetle",
       "size_mm": 20.2,
