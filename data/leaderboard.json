@@ -1,9 +1,9 @@
 {
-  "generated_at": 1761062175,
+  "generated_at": 1761062775,
   "top_catches": [
     {
       "username": "nuflux",
-      "total_catches": 37,
+      "total_catches": 40,
       "level": 3
     },
     {
@@ -15,6 +15,11 @@
       "username": "holloww124",
       "total_catches": 2,
       "level": 1
+    },
+    {
+      "username": "noelplink",
+      "total_catches": 1,
+      "level": 1
     }
   ],
   "top_levels": [
@@ -22,7 +27,7 @@
       "username": "nuflux",
       "level": 3,
       "xp": 0.19333200000000006,
-      "total_catches": 37
+      "total_catches": 40
     },
     {
       "username": "holloww124",
@@ -35,6 +40,12 @@
       "level": 1,
       "xp": 0.0,
       "total_catches": 4
+    },
+    {
+      "username": "noelplink",
+      "level": 1,
+      "xp": 0.0,
+      "total_catches": 1
     }
   ],
   "biggest_by_species": [
@@ -75,8 +86,8 @@
     },
     {
       "species": "roach",
-      "size_mm": 74.6,
-      "username": "mozacs"
+      "size_mm": 79.3,
+      "username": "noelplink"
     },
     {
       "species": "scarab",
