@@ -1,14 +1,14 @@
 {
-  "generated_at": 1761059989,
+  "generated_at": 1761060589,
   "top_catches": [
     {
       "username": "nuflux",
-      "total_catches": 29,
-      "level": 1
+      "total_catches": 31,
+      "level": 2
     },
     {
       "username": "mozacs",
-      "total_catches": 2,
+      "total_catches": 3,
       "level": 1
     },
     {
@@ -20,9 +20,9 @@
   "top_levels": [
     {
       "username": "nuflux",
-      "level": 1,
-      "xp": 0.8766662000000001,
-      "total_catches": 29
+      "level": 2,
+      "xp": 0.8599988000000001,
+      "total_catches": 31
     },
     {
       "username": "holloww124",
@@ -34,7 +34,7 @@
       "username": "mozacs",
       "level": 1,
       "xp": 0.0,
-      "total_catches": 2
+      "total_catches": 3
     }
   ],
   "biggest_by_species": [
@@ -70,8 +70,8 @@
     },
     {
       "species": "roach",
-      "size_mm": 68.9,
-      "username": "nuflux"
+      "size_mm": 74.6,
+      "username": "mozacs"
     },
     {
       "species": "scarab",
@@ -80,7 +80,7 @@
     },
     {
       "species": "stag beetle",
-      "size_mm": 64.4,
+      "size_mm": 112.8,
       "username": "nuflux"
     }
   ]
