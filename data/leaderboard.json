@@ -1,9 +1,9 @@
 {
-  "generated_at": 1761004886,
+  "generated_at": 1761004930,
   "top_catches": [
     {
       "username": "nuflux",
-      "total_catches": 2,
+      "total_catches": 3,
       "level": 1,
       "name_color": "#1e90ff",
       "paint_css": null
@@ -14,7 +14,7 @@
       "username": "nuflux",
       "level": 1,
       "xp": 0.0,
-      "total_catches": 2,
+      "total_catches": 3,
       "name_color": "#1e90ff",
       "paint_css": null
     }
@@ -23,6 +23,13 @@
     {
       "species": "ant",
       "size_mm": 11.7,
+      "username": "nuflux",
+      "name_color": "#1e90ff",
+      "paint_css": null
+    },
+    {
+      "species": "beetle",
+      "size_mm": 19.1,
       "username": "nuflux",
       "name_color": "#1e90ff",
       "paint_css": null
