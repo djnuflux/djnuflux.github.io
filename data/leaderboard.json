@@ -1,9 +1,9 @@
 {
-  "generated_at": 1761061575,
+  "generated_at": 1761062175,
   "top_catches": [
     {
       "username": "nuflux",
-      "total_catches": 35,
+      "total_catches": 37,
       "level": 3
     },
     {
@@ -22,7 +22,7 @@
       "username": "nuflux",
       "level": 3,
       "xp": 0.19333200000000006,
-      "total_catches": 35
+      "total_catches": 37
     },
     {
       "username": "holloww124",
@@ -40,7 +40,7 @@
   "biggest_by_species": [
     {
       "species": "ant",
-      "size_mm": 12.2,
+      "size_mm": 13.9,
       "username": "nuflux"
     },
     {
