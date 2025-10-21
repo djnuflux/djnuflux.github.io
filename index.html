@@ -154,200 +154,171 @@
     </footer>
   </div>
 
-  <script>
-    // Resolve the data file relative to this page, regardless of subpath
-    // Robust data locator: try common locations in order
-const CANDIDATES = [
-  new URL('data/leaderboard.json', document.baseURI).toString(),
-  new URL('/data/leaderboard.json', document.baseURI).toString(),
-  new URL('/docs/data/leaderboard.json', document.baseURI).toString()
-];
+<script>
+  "use strict";
 
-async function loadData(){
-  for (const url of CANDIDATES){
-    try {
-      console.log('[leaderboard] trying', url);
-      const res = await fetch(url, {cache:'no-store'});
-      if (!res.ok) { continue; }
-      const ct = res.headers.get('content-type') || '';
-      if (!ct.includes('application/json')) { continue; }
-      return await res.json();
-    } catch (_) {}
+  // ---------- tiny helpers ----------
+  const $ = s => document.querySelector(s);
+  function showError(msg){
+    const el = $("#error"); // if you have an error banner
+    if (el) el.textContent = msg;
+    console.error("[leaderboard]", msg);
   }
-  throw new Error('Could not find leaderboard.json (tried: '+CANDIDATES.join(', ')+')');
-}
 
-const $ = s => document.querySelector(s);
+  // Robust data locator: try common paths on GitHub Pages/custom domains
+  const CANDIDATES = [
+    new URL("data/leaderboard.json", document.baseURI).toString(),
+    new URL("/data/leaderboard.json", document.baseURI).toString(),
+    new URL("/docs/data/leaderboard.json", document.baseURI).toString()
+  ];
 
-function showError(msg){(msg){
-      const el = document.getElementById('stamp');
-      if(el) el.textContent = msg;
-      console.error('[leaderboard]', msg);
-    }
-
-    function safeHex(hex){
-      if(!hex || typeof hex !== 'string') return null;
-      const m = hex.trim().match(/^#([0-9a-f]{3}|[0-9a-f]{6})$/i);
-      return m ? m[0] : null;
-    }
-
-    function escapeHtml(s){
-      return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;'}[c]));
-    }
-
-    function paintObjectToCSS(p){
-      // Supports simple 7TV-style objects: {type:'linear'|'radial'|'conic', angle:90, stops:[['#a',0],['#b',1]]}
+  async function loadData(){
+    for (const url of CANDIDATES){
       try{
-        if (!p || typeof p !== 'object' || !Array.isArray(p.stops)) return null;
-        const type = (p.type||'linear').toLowerCase();
-        const angle = (p.angle!=null ? p.angle : 90);
-        const stops = p.stops.map(s=> (Array.isArray(s) ? `${s[0]} ${Math.round((s[1]||0)*100)}%` : String(s))).join(',');
-        if (type === 'radial') return `radial-gradient(circle, ${stops})`;
-        if (type === 'conic')  return `conic-gradient(from ${angle}deg, ${stops})`;
-        return `linear-gradient(${angle}deg, ${stops})`;
-      }catch{ return null; }
+        console.log("[leaderboard] trying", url);
+        const res = await fetch(url, {cache: "no-store"});
+        if (!res.ok) continue;
+        const ct = res.headers.get("content-type") || "";
+        if (!ct.includes("application/json")) continue;
+        return await res.json();
+      }catch(_){}
     }
+    throw new Error("Could not find leaderboard.json");
+  }
 
-    function renderName(row){
-      const name = escapeHtml(row.username ?? '');
-      const color = safeHex(row.name_color);
-      let paint = row.paint_css; // can be a string 'linear-gradient(...)' or an object
-      let css = null;
-      if (paint) {
-        if (typeof paint === 'string') css = paint.trim();
-        else css = paintObjectToCSS(paint);
-      }
-      if (css){
-        return `<span class="name"><span class="swatch" style="background:${css}"></span><span class="paint" style="background:${css}">${name}</span></span>`;
-      }
-      if (color){
-        return `<span class="name"><span class="swatch" style="background:${color}"></span><span style="color:${color}">${name}</span></span>`;
-      }
-      return `<span class="name"><span class="swatch"></span><span>${name}</span></span>`;
-    }"></span><span class="paint" style="background:${paint}">${name}</span></span>`;
-      }
-      if (color){
-        return `<span class="name"><span class="swatch" style="background:${color}"></span><span style="color:${color}">${name}</span></span>`;
-      }
-      return `<span class="name"><span class="swatch"></span><span>${name}</span></span>`;
+  // ---------- table rendering ----------
+  function safeHex(h){ return /^#([0-9a-f]{3}|[0-9a-f]{6})$/i.test(h||"") ? h : ""; }
+
+  function renderName(row){
+    const name = String(row.username ?? "");
+    const color = safeHex(row.name_color);
+    const paint = row.paint_css && String(row.paint_css);
+    if (paint){
+      return `<span class="name"><span class="swatch" style="background:${paint}"></span><span class="paint" style="background:${paint}">${name}</span></span>`;
     }
+    if (color){
+      return `<span class="name"><span class="swatch" style="background:${color}"></span><span style="color:${color}">${name}</span></span>`;
+    }
+    return `<span class="name"><span class="swatch"></span><span>${name}</span></span>`;
+  }
 
-    function renderTable(id, rows, columns) {
-      const tbody = document.querySelector(`#${id} tbody`);
-      tbody.innerHTML = '';
-      rows.forEach(r => {
-        const tr = document.createElement('tr');
-        columns.forEach(k => {
-          const td = document.createElement('td');
-          if (k === 'username') {
-            td.innerHTML = renderName(r);
-          } else {
-            let v = r[k];
-            if (typeof v === 'number') {
-              if (k === 'xp') v = v.toFixed(3);
-              if (k === 'size_mm') v = Number(v).toFixed(1);
-            }
-            td.textContent = (v ?? '');
+  function renderTable(tableId, rows, columns){
+    const tbody = document.querySelector(`#${tableId} tbody`);
+    if (!tbody) return;
+    tbody.innerHTML = "";
+    rows.forEach(r => {
+      const tr = document.createElement("tr");
+      columns.forEach(k => {
+        const td = document.createElement("td");
+        let v = r[k];
+        if (k === "username") {
+          td.innerHTML = renderName(r);
+        } else {
+          if (typeof v === "number"){
+            if (k === "xp") v = Number(v).toFixed(3);
+            if (k === "size_mm") v = Number(v).toFixed(1);
           }
-          tr.appendChild(td);
-        });
-        tbody.appendChild(tr);
-      });
-    }
-
-    function attachSort(tableId, rows, columns) {
-      const ths = document.querySelectorAll(`#${tableId} thead th button`);
-      ths.forEach(btn => {
-        btn.addEventListener('click', () => {
-          const key = btn.dataset.k;
-          const numeric = btn.hasAttribute('data-n');
-          const dir = btn.dataset.dir === 'asc' ? 'desc' : 'asc';
-          ths.forEach(b => b.removeAttribute('data-dir'));
-          btn.setAttribute('data-dir', dir);
-          rows.sort((a,b) => {
-            const A = a[key];
-            const B = b[key];
-            const av = numeric ? Number(A ?? 0) : String(A ?? '').toLowerCase();
-            const bv = numeric ? Number(B ?? 0) : String(B ?? '').toLowerCase();
-            return (av === bv ? 0 : (av > bv ? 1 : -1)) * (dir === 'asc' ? 1 : -1);
-          });
-          renderTable(tableId, rows, columns);
-        });
-      });
-    }
-
-    function uniq(arr){return [...new Set(arr)]}
-
-    function applySearchFilter(rows, q){
-      if(!q) return rows;
-      q = q.toLowerCase();
-      return rows.filter(r => (r.username||'').toLowerCase().includes(q));
-    }
-
-    function applySpeciesFilter(rows, species){
-      if(!species) return rows;
-      return rows.filter(r => (r.species||'') === species);
-    }
-
-    function renderSpeciesChips(speciesList){
-      const wrap = $('#speciesChips');
-      wrap.innerHTML = '';
-      speciesList.forEach(s => {
-        const el = document.createElement('div');
-        el.className = 'species';
-        el.innerHTML = `<span class="dot"></span><span>${s}</span>`;
-        el.addEventListener('click', () => {
-          $('#speciesFilter').value = s; update();
-        });
-        wrap.appendChild(el);
-      });
-    }
-
-    async function main(){
-      try{
-        console.log('[leaderboard] fetching', DATA_URL);
-        const data = await loadData();
-
-        const topCatchesRaw = data.top_catches || [];
-        const topLevelsRaw  = data.top_levels || [];
-        const biggestRaw    = data.biggest_by_species || [];
-
-        const speciesList = uniq(biggestRaw.map(x=>x.species)).sort();
-        const sf = $('#speciesFilter');
-        speciesList.forEach(s=>{ const o=document.createElement('option'); o.value=s; o.textContent=s; sf.appendChild(o); });
-        renderSpeciesChips(speciesList);
-
-        const state = { q:'', species:'' };
-        function update(){
-          state.q = $('#search').value.trim();
-          state.species = $('#speciesFilter').value;
-          const tc = applySearchFilter(topCatchesRaw, state.q);
-          const tl = applySearchFilter(topLevelsRaw, state.q);
-          const bg = applySpeciesFilter(biggestRaw, state.species);
-          renderTable('top-catches', tc, ['username','total_catches','level']);
-          renderTable('top-levels',  tl, ['username','level','xp','total_catches']);
-          renderTable('biggest',     bg, ['species','size_mm','username']);
+          td.textContent = v ?? "";
         }
+        tr.appendChild(td);
+      });
+      tbody.appendChild(tr);
+    });
+  }
 
-        attachSort('top-catches', topCatchesRaw, ['username','total_catches','level']);
-        attachSort('top-levels',  topLevelsRaw,  ['username','level','xp','total_catches']);
-        attachSort('biggest',     biggestRaw,    ['species','size_mm','username']);
+  function attachSort(tableId, rows, columns){
+    const ths = document.querySelectorAll(`#${tableId} thead th button`);
+    ths.forEach(btn => {
+      btn.addEventListener("click", () => {
+        const key = btn.dataset.k;
+        const numeric = btn.hasAttribute("data-n");
+        const dir = btn.dataset.dir === "asc" ? "desc" : "asc";
+        ths.forEach(b => b.removeAttribute("data-dir"));
+        btn.setAttribute("data-dir", dir);
+        rows.sort((a,b) => {
+          const A = a[key]; const B = b[key];
+          const av = numeric ? Number(A ?? 0) : String(A ?? "").toLowerCase();
+          const bv = numeric ? Number(B ?? 0) : String(B ?? "").toLowerCase();
+          return (av === bv ? 0 : (av > bv ? 1 : -1)) * (dir === "asc" ? 1 : -1);
+        });
+        renderTable(tableId, rows, columns);
+      });
+    });
+  }
 
-        $('#search').addEventListener('input', update);
-        $('#speciesFilter').addEventListener('change', update);
-        update();
+  const uniq = arr => [...new Set(arr)];
+  const applySearchFilter = (rows, q) => !q ? rows : rows.filter(r => (r.username||"").toLowerCase().includes(q.toLowerCase()));
+  const applySpeciesFilter = (rows, s) => !s ? rows : rows.filter(r => (r.species||"") === s);
 
-        if (data.generated_at){
-          const dt = new Date(data.generated_at*1000);
-          $('#stamp').textContent = dt.toLocaleString();
-        }
-      }catch(err){
-        showError('Could not load leaderboard data. If running locally, use a web server (file:// fetches will fail).');
-        console.error(err);
+  function renderSpeciesChips(speciesList){
+    const wrap = $("#speciesChips");
+    if (!wrap) return;
+    wrap.innerHTML = "";
+    speciesList.forEach(s => {
+      const el = document.createElement("div");
+      el.className = "species";
+      el.innerHTML = `<span class="dot"></span><span>${s}</span>`;
+      el.addEventListener("click", () => { $("#speciesFilter").value = s; update(); });
+      wrap.appendChild(el);
+    });
+  }
+
+  // ---------- main ----------
+  async function main(){
+    console.log("[leaderboard] script started");
+    try{
+      const data = await loadData();
+
+      const topCatchesRaw = data.top_catches || [];
+      const topLevelsRaw  = data.top_levels || [];
+      const biggestRaw    = data.biggest_by_species || [];
+
+      const speciesList = uniq(biggestRaw.map(x => x.species)).sort();
+      const sf = $("#speciesFilter");
+      if (sf){
+        speciesList.forEach(s => {
+          const o = document.createElement("option");
+          o.value = s; o.textContent = s; sf.appendChild(o);
+        });
       }
-    }
+      renderSpeciesChips(speciesList);
 
-    main();
-  </script>
+      const state = { q:"", species:"" };
+
+      function update(){
+        state.q = ($("#search")?.value || "").trim();
+        state.species = $("#speciesFilter")?.value || "";
+        const tc = applySearchFilter(topCatchesRaw, state.q);
+        const tl = applySearchFilter(topLevelsRaw, state.q);
+        const bg = applySpeciesFilter(biggestRaw, state.species);
+        renderTable("top-catches", tc, ["username","total_catches","level"]);
+        renderTable("top-levels",  tl, ["username","level","xp","total_catches"]);
+        renderTable("biggest",     bg, ["species","size_mm","username"]);
+      }
+
+      attachSort("top-catches", topCatchesRaw, ["username","total_catches","level"]);
+      attachSort("top-levels",  topLevelsRaw,  ["username","level","xp","total_catches"]);
+      attachSort("biggest",     biggestRaw,    ["species","size_mm","username"]);
+
+      $("#search")?.addEventListener("input", update);
+      $("#speciesFilter")?.addEventListener("change", update);
+
+      update();
+
+      if (data.generated_at){
+        const dt = new Date(data.generated_at * 1000);
+        const stamp = $("#stamp");
+        if (stamp) stamp.textContent = dt.toLocaleString();
+      }
+    }catch(err){
+      showError(err.message || "Could not load leaderboard data.");
+      console.error(err);
+    }
+  }
+
+  // kick off
+  main();
+</script>
+
 </body>
 </html>
