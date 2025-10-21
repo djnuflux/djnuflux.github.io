@@ -1,9 +1,9 @@
 {
-  "generated_at": 1761016188,
+  "generated_at": 1761016788,
   "top_catches": [
     {
       "username": "nuflux",
-      "total_catches": 16,
+      "total_catches": 17,
       "level": 1
     }
   ],
@@ -12,7 +12,7 @@
       "username": "nuflux",
       "level": 1,
       "xp": 0.8766662000000001,
-      "total_catches": 16
+      "total_catches": 17
     }
   ],
   "biggest_by_species": [
@@ -28,7 +28,7 @@
     },
     {
       "species": "buh",
-      "size_mm": 64.6,
+      "size_mm": 82.4,
       "username": "nuflux"
     },
     {
