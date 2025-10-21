@@ -1,9 +1,14 @@
 {
-  "generated_at": 1761017988,
+  "generated_at": 1761057330,
   "top_catches": [
     {
       "username": "nuflux",
       "total_catches": 19,
+      "level": 1
+    },
+    {
+      "username": "mozacs",
+      "total_catches": 1,
       "level": 1
     }
   ],
@@ -13,6 +18,12 @@
       "level": 1,
       "xp": 0.8766662000000001,
       "total_catches": 19
+    },
+    {
+      "username": "mozacs",
+      "level": 1,
+      "xp": 0.0,
+      "total_catches": 1
     }
   ],
   "biggest_by_species": [
