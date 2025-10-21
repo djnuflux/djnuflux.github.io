@@ -1,52 +1,25 @@
 {
-  "generated_at": 1761008698,
+  "generated_at": 1761008910,
   "top_catches": [
     {
       "username": "nuflux",
-      "total_catches": 6,
-      "level": 1,
-      "name_color": "#1e90ff",
-      "paint_css": null
+      "total_catches": 1,
+      "level": 1
     }
   ],
   "top_levels": [
     {
       "username": "nuflux",
       "level": 1,
-      "xp": 0.3166664,
-      "total_catches": 6,
-      "name_color": "#1e90ff",
-      "paint_css": null
+      "xp": 0.0,
+      "total_catches": 1
     }
   ],
   "biggest_by_species": [
     {
-      "species": "ant",
-      "size_mm": 11.7,
-      "username": "nuflux",
-      "name_color": "#1e90ff",
-      "paint_css": null
-    },
-    {
-      "species": "beetle",
-      "size_mm": 36.7,
-      "username": "nuflux",
-      "name_color": "#1e90ff",
-      "paint_css": null
-    },
-    {
       "species": "moth",
-      "size_mm": 62.4,
-      "username": "nuflux",
-      "name_color": "#1e90ff",
-      "paint_css": null
-    },
-    {
-      "species": "roach",
-      "size_mm": 43.6,
-      "username": "nuflux",
-      "name_color": "#1e90ff",
-      "paint_css": null
+      "size_mm": 66.5,
+      "username": "nuflux"
     }
   ]
 }
