@@ -1,9 +1,9 @@
 {
-  "generated_at": 1761058152,
+  "generated_at": 1761058789,
   "top_catches": [
     {
       "username": "nuflux",
-      "total_catches": 23,
+      "total_catches": 25,
       "level": 1
     },
     {
@@ -22,7 +22,7 @@
       "username": "nuflux",
       "level": 1,
       "xp": 0.8766662000000001,
-      "total_catches": 23
+      "total_catches": 25
     },
     {
       "username": "holloww124",
@@ -55,7 +55,7 @@
     },
     {
       "species": "butterfly",
-      "size_mm": 100.9,
+      "size_mm": 108.9,
       "username": "nuflux"
     },
     {
@@ -77,6 +77,11 @@
       "species": "scarab",
       "size_mm": 60.5,
       "username": "holloww124"
+    },
+    {
+      "species": "stag beetle",
+      "size_mm": 64.4,
+      "username": "nuflux"
     }
   ]
 }
