@@ -1,18 +1,28 @@
 {
-  "generated_at": 1767230082,
+  "generated_at": 1767230682,
   "top_catches": [
     {
       "username": "nuflux",
-      "total_catches": 63,
+      "total_catches": 65,
       "level": 4
     },
     {
       "username": "mozacs",
-      "total_catches": 6,
+      "total_catches": 7,
       "level": 1
     },
     {
       "username": "holloww124",
+      "total_catches": 2,
+      "level": 1
+    },
+    {
+      "username": "demongod9999",
+      "total_catches": 2,
+      "level": 1
+    },
+    {
+      "username": "jb247",
       "total_catches": 2,
       "level": 1
     },
@@ -27,7 +37,7 @@
       "username": "nuflux",
       "level": 4,
       "xp": 0.7399980000000002,
-      "total_catches": 63
+      "total_catches": 65
     },
     {
       "username": "holloww124",
@@ -39,7 +49,19 @@
       "username": "mozacs",
       "level": 1,
       "xp": 0.0,
-      "total_catches": 6
+      "total_catches": 7
+    },
+    {
+      "username": "demongod9999",
+      "level": 1,
+      "xp": 0.0,
+      "total_catches": 2
+    },
+    {
+      "username": "jb247",
+      "level": 1,
+      "xp": 0.0,
+      "total_catches": 2
     },
     {
       "username": "noelplink",
@@ -91,8 +113,8 @@
     },
     {
       "species": "scarab",
-      "size_mm": 62.6,
-      "username": "nuflux"
+      "size_mm": 65.5,
+      "username": "mozacs"
     },
     {
       "species": "stag beetle",
