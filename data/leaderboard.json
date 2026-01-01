@@ -1,5 +1,5 @@
 {
-  "generated_at": 1767230682,
+  "generated_at": 1767231282,
   "top_catches": [
     {
       "username": "nuflux",
@@ -12,12 +12,12 @@
       "level": 1
     },
     {
-      "username": "holloww124",
-      "total_catches": 2,
+      "username": "demongod9999",
+      "total_catches": 4,
       "level": 1
     },
     {
-      "username": "demongod9999",
+      "username": "holloww124",
       "total_catches": 2,
       "level": 1
     },
@@ -55,7 +55,7 @@
       "username": "demongod9999",
       "level": 1,
       "xp": 0.0,
-      "total_catches": 2
+      "total_catches": 4
     },
     {
       "username": "jb247",
@@ -120,6 +120,11 @@
       "species": "stag beetle",
       "size_mm": 112.8,
       "username": "nuflux"
+    },
+    {
+      "species": "stick bug",
+      "size_mm": 122.2,
+      "username": "demongod9999"
     }
   ]
 }
