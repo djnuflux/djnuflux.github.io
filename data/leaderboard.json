@@ -1,5 +1,5 @@
 {
-  "generated_at": 1791396093,
+  "generated_at": 1791399411,
   "top_catches": [
     {
       "username": "nuflux",
@@ -28,6 +28,11 @@
     },
     {
       "username": "noelplink",
+      "total_catches": 1,
+      "level": 1
+    },
+    {
+      "username": "giaumi",
       "total_catches": 1,
       "level": 1
     }
@@ -65,6 +70,12 @@
     },
     {
       "username": "noelplink",
+      "level": 1,
+      "xp": 0.0,
+      "total_catches": 1
+    },
+    {
+      "username": "giaumi",
       "level": 1,
       "xp": 0.0,
       "total_catches": 1
